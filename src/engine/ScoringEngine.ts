@@ -67,13 +67,4 @@ export class ScoringEngine {
     };
   }
 
-  /**
-   * Check if speed bonus should be awarded (display only, doesn't affect score)
-   */
-  public hasSpeedBonus(timeRemaining: number, timeLimit: number): boolean {
-    if (timeLimit === 0) return false; // No time limit
-    const timeUsed = timeLimit - timeRemaining;
-    const percentageUsed = timeUsed / timeLimit;
-    return percentageUsed < 0.5; // Used less than 50% of time
-  }
 }

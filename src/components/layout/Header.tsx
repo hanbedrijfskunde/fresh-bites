@@ -1,15 +1,13 @@
 import React from 'react';
 import { StarRating } from './StarRating';
-import { Timer } from '../timer/Timer';
 import type { GeneratedTransaction } from '@/types';
 
 interface HeaderProps {
   currentTransaction?: GeneratedTransaction;
   stars: number;
-  showTimer?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentTransaction, stars, showTimer = true }) => {
+export const Header: React.FC<HeaderProps> = ({ currentTransaction, stars }) => {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-4 py-4">
@@ -22,13 +20,6 @@ export const Header: React.FC<HeaderProps> = ({ currentTransaction, stars, showT
               <p className="text-xs text-gray-500">Boekhoudsimulatie</p>
             </div>
           </div>
-
-          {/* Center - Timer */}
-          {showTimer && currentTransaction && (
-            <div className="flex-1 flex justify-center">
-              <Timer transactionId={currentTransaction.id} timeLimit={currentTransaction.timeLimit} />
-            </div>
-          )}
 
           {/* Right - Stars and Time */}
           <div className="flex items-center gap-6">

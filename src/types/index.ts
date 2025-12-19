@@ -129,9 +129,6 @@ export interface GeneratedTransaction {
   feedbackCorrect: FeedbackTemplate;
   feedbackIncorrect: FeedbackTemplate;
 
-  // Timer configuration
-  timeLimit: number; // Seconds, 0 = no limit
-
   // Amount mismatch feature (for training double-checking)
   hasAmountMismatch: boolean; // Does this transaction have a chat/receipt amount difference?
   displayAmount?: number; // Amount shown in chat message (differs from actual)
@@ -144,15 +141,7 @@ export interface GeneratedTransaction {
 }
 
 export interface SimulationConfig {
-  relaxedMode: boolean; // Extended time limits
-  relaxedMultiplier: number; // Default: 1.75
-
-  transactionTimeLimits: {
-    [transactionNumber: number]: number; // Seconds
-  };
-
-  timerWarningThreshold: number; // Default: 30 seconds
-  timerCriticalThreshold: number; // Default: 10 seconds
+  // Future configuration options can be added here
 }
 
 /**
@@ -183,9 +172,6 @@ export interface TransactionProgress {
   hintsUsed: number; // 0-3
   hintsViewed: HintLevel[]; // Which hint levels viewed [1,2]
 
-  timeRemaining: number | null; // Seconds, null if no limit
-  timeExpired: boolean;
-
   currentEntry: JournalEntry[]; // User's current input
   isCorrect: boolean | null; // null = not submitted yet
 
@@ -211,12 +197,9 @@ export interface UserProgress {
     [transactionId: string]: TransactionProgress;
   };
 
-  // Timing
+  // Session management
   startedAt?: Date;
   completedAt?: Date;
-  totalTimeSpent: number; // Seconds
-
-  // Session management
   lastSavedAt: Date;
 }
 
@@ -258,25 +241,6 @@ export interface ValidationResult {
   // Detailed feedback
   balanceCheck: BalanceCheck;
   entryMatches: EntryMatchResult[];
-}
-
-// ============================================================================
-// TIMER
-// ============================================================================
-
-export type TimerStatus = 'normal' | 'warning' | 'critical' | 'expired';
-
-export interface TimerState {
-  transactionId: string;
-  timeLimit: number; // Total seconds
-  timeRemaining: number; // Current seconds
-  isRunning: boolean;
-  isPaused: boolean; // Future: pause capability
-
-  status: TimerStatus;
-
-  startedAt?: Date;
-  pausedAt?: Date;
 }
 
 // ============================================================================
@@ -360,9 +324,6 @@ export interface SimulationStatistics {
   correctCount: number;
   firstTryCorrect: number;
   hintsUsed: number;
-  totalTimeSpent: number; // Seconds
-  averageTimePerTransaction: number; // Seconds
-  timeoutsCount: number;
 }
 
 // ============================================================================

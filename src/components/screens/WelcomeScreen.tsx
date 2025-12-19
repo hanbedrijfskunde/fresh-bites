@@ -3,7 +3,6 @@ import { useSimulationStore } from '@/store/useSimulationStore';
 
 export const WelcomeScreen: React.FC = () => {
   const [userId, setUserId] = useState('');
-  const [relaxedMode, setRelaxedMode] = useState(false);
   const { initializeSimulation, goToScreen } = useSimulationStore();
 
   const handleStart = () => {
@@ -12,7 +11,7 @@ export const WelcomeScreen: React.FC = () => {
       return;
     }
 
-    initializeSimulation(userId, undefined, { relaxedMode });
+    initializeSimulation(userId);
     goToScreen('simulation');
   };
 
@@ -38,10 +37,6 @@ export const WelcomeScreen: React.FC = () => {
             <li className="flex items-start">
               <span className="mr-2">📊</span>
               <span>6 transacties verspreid over één werkdag</span>
-            </li>
-            <li className="flex items-start">
-              <span className="mr-2">⏱️</span>
-              <span>Elke transactie heeft een tijdslimiet</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">⭐</span>
@@ -70,19 +65,6 @@ export const WelcomeScreen: React.FC = () => {
               autoFocus
             />
           </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="relaxedMode"
-              checked={relaxedMode}
-              onChange={(e) => setRelaxedMode(e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-            />
-            <label htmlFor="relaxedMode" className="ml-2 block text-sm text-gray-700">
-              Ontspannen modus (75% meer tijd per transactie)
-            </label>
-          </div>
         </div>
 
         {/* Start Button */}
@@ -92,7 +74,7 @@ export const WelcomeScreen: React.FC = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Geschatte duur: 12-18 minuten</p>
+          <p>Veel succes!</p>
         </div>
       </div>
     </div>

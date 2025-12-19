@@ -1,18 +1,7 @@
 import type { SimulationConfig } from '@/types';
 
 export const DEFAULT_CONFIG: SimulationConfig = {
-  relaxedMode: false,
-  relaxedMultiplier: 1.75,
-  transactionTimeLimits: {
-    1: 180, // 3:00
-    2: 180, // 3:00
-    3: 120, // 2:00
-    4: 120, // 2:00
-    5: 60, // 1:00
-    6: 0, // No limit (eindcontrole)
-  },
-  timerWarningThreshold: 30,
-  timerCriticalThreshold: 10,
+  // Future configuration options
 };
 
 export const MAX_ATTEMPTS = 3;

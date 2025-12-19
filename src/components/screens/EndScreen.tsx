@@ -2,7 +2,7 @@ import React from 'react';
 import { StarRating } from '../layout/StarRating';
 import { useSimulationStore } from '@/store/useSimulationStore';
 import { ScoringEngine } from '@/engine/ScoringEngine';
-import { formatDuration, formatPercentage } from '@/utils/formatters';
+import { formatPercentage } from '@/utils/formatters';
 
 export const EndScreen: React.FC = () => {
   const { simulation, userProgress, resetSimulation, goToScreen } = useSimulationStore();
@@ -26,9 +26,6 @@ export const EndScreen: React.FC = () => {
     (sum, p) => sum + p.hintsUsed,
     0
   );
-  const timeouts = Object.values(userProgress.transactionProgress).filter(
-    (p) => p.timeExpired
-  ).length;
 
   const handleRestart = () => {
     resetSimulation();
@@ -48,8 +45,20 @@ export const EndScreen: React.FC = () => {
         {/* Stars */}
         <div className="flex justify-center mb-8">
           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6 border-2 border-primary/20">
-            <StarRating stars={userProgress.stars} maxStars={6} size="lg" showCount={true} />
+            <StarRating stars={userProgress.stars} maxStars={5} size="lg" showCount={true} />
           </div>
+        </div>
+
+        {/* Eindcontrole Message */}
+        <div className="bg-secondary/10 rounded-lg p-6 mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-3xl">👩‍💼</span>
+            <h3 className="text-xl font-semibold text-secondary">Fatima</h3>
+          </div>
+          <p className="text-gray-700 italic">
+            "Einde van de dag! Bedankt voor je hulp vandaag. De administratie is helemaal
+            up-to-date dankzij jou. Goed gedaan! 🎉"
+          </p>
         </div>
 
         {/* Performance Level */}
@@ -83,18 +92,6 @@ export const EndScreen: React.FC = () => {
               <p className="text-2xl font-bold text-gray-900">{hintsUsed}</p>
             </div>
             <div>
-              <p className="text-gray-600">Tijd verstreken:</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {timeouts} transactie{timeouts !== 1 ? 's' : ''}
-              </p>
-            </div>
-            <div className="col-span-2">
-              <p className="text-gray-600">Totale tijd:</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {formatDuration(userProgress.totalTimeSpent)}
-              </p>
-            </div>
-            <div className="col-span-2">
               <p className="text-gray-600">First-try accuracy:</p>
               <p className="text-2xl font-bold text-gray-900">
                 {formatPercentage(firstTryCorrect, totalTransactions)}

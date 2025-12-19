@@ -135,7 +135,7 @@ export class SimulationGenerator {
   private generateTransaction(
     template: TransactionTemplate,
     transactionNumber: number,
-    config: SimulationConfig,
+    _config: SimulationConfig,
     hasMismatch: boolean = false
   ): GeneratedTransaction {
     // Generate actual amount (the correct amount on the receipt)
@@ -173,12 +173,6 @@ export class SimulationGenerator {
 
     // Fill hints with ACTUAL amount (hints should guide to correct answer)
     const hints = this.fillHints(template.hints, { amount: actualAmount, partial });
-
-    // Determine time limit
-    const baseLimit = config.transactionTimeLimits[transactionNumber] || 120;
-    const timeLimit = config.relaxedMode
-      ? Math.round(baseLimit * config.relaxedMultiplier)
-      : baseLimit;
 
     // Generate dynamic HTML attachment with ACTUAL amounts (correct values on receipt)
     let attachment = template.attachment;
@@ -226,7 +220,6 @@ export class SimulationGenerator {
       hints,
       feedbackCorrect: template.feedbackCorrect,
       feedbackIncorrect: template.feedbackIncorrect,
-      timeLimit,
       hasAmountMismatch: hasMismatch,
       displayAmount: hasMismatch ? displayAmount : undefined,
       actualAmount,

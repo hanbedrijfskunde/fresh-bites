@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Header } from '../layout/Header';
 import { ProgressBar } from '../layout/ProgressBar';
 import { MessageList } from '../messages/MessageList';
@@ -9,7 +9,7 @@ import { AttachmentModal } from '../modals/AttachmentModal';
 import { useSimulationStore } from '@/store/useSimulationStore';
 
 export const SimulationScreen: React.FC = () => {
-  const { simulation, userProgress, activeModal } = useSimulationStore();
+  const { simulation, userProgress, activeModal, startTransaction } = useSimulationStore();
 
   if (!simulation || !userProgress) {
     return (
@@ -22,13 +22,19 @@ export const SimulationScreen: React.FC = () => {
   const currentTransaction = simulation.transactions[userProgress.currentTransactionIndex];
   const transactionIds = simulation.transactions.map((t) => t.id);
 
+  // Auto-start transaction when it changes
+  useEffect(() => {
+    if (currentTransaction) {
+      startTransaction(currentTransaction.id);
+    }
+  }, [currentTransaction?.id, startTransaction]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <Header
         currentTransaction={currentTransaction}
         stars={userProgress.stars}
-        showTimer={currentTransaction?.timeLimit > 0}
       />
 
       {/* Main Content */}

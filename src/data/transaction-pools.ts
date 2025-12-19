@@ -486,37 +486,6 @@ export const TRANSACTION_POOLS: TransactionPool[] = [
       },
     ],
   },
-
-  // =========================================================================
-  // POOL F (16:00): Eindcontrole (fixed - no randomization)
-  // =========================================================================
-  {
-    id: 'pool_f',
-    timeSlot: '16:00',
-    label: 'Eindcontrole',
-    templates: [
-      {
-        id: 'f1_eindcontrole',
-        poolId: 'pool_f',
-        sender: CHARACTERS.fatima,
-        messageTemplate:
-          'Einde van de dag! Bedankt voor je hulp vandaag. De administratie is helemaal up-to-date dankzij jou. Goed gedaan! 🎉',
-        amountRange: { min: 0, max: 0, step: 0 }, // No amounts
-        correctAnswerTemplate: [], // No journal entry needed
-        hints: [],
-        feedbackCorrect: {
-          message: 'Dag voltooid!',
-          characterQuote:
-            'Perfect! Dankzij jou is de administratie van FreshBites weer helemaal op orde. Tot morgen!',
-        },
-        feedbackIncorrect: {
-          message: 'Dit is het einde van de simulatie.',
-        },
-        complexity: 'basic',
-        requiresMultipleRows: false,
-      },
-    ],
-  },
 ];
 
 /**

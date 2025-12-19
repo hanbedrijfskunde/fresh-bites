@@ -77,7 +77,6 @@ export const useSimulationStore = create<SimulationStore>()(
           stars: 0,
           totalScore: 0,
           transactionProgress: {},
-          totalTimeSpent: 0,
           lastSavedAt: new Date(),
         };
 
@@ -89,8 +88,6 @@ export const useSimulationStore = create<SimulationStore>()(
             attempts: 0,
             hintsUsed: 0,
             hintsViewed: [],
-            timeRemaining: t.timeLimit,
-            timeExpired: false,
             currentEntry: [],
             isCorrect: null,
             starsEarned: 0,
@@ -110,15 +107,25 @@ export const useSimulationStore = create<SimulationStore>()(
         if (!userProgress) return;
 
         const progress = userProgress.transactionProgress[transactionId];
-        if (progress) {
-          progress.status = 'active';
-          if (!userProgress.startedAt) {
-            userProgress.startedAt = new Date();
-          }
-          userProgress.status = 'in_progress';
-          set({ userProgress: { ...userProgress } });
-          get().saveProgress();
-        }
+        if (!progress) return;
+
+        // IMMUTABLE UPDATE - Create new objects at each level
+        set({
+          userProgress: {
+            ...userProgress,
+            status: 'in_progress',
+            startedAt: userProgress.startedAt || new Date(),
+            transactionProgress: {
+              ...userProgress.transactionProgress,
+              [transactionId]: {
+                ...progress,
+                status: 'active',
+              },
+            },
+          },
+        });
+
+        get().saveProgress();
       },
 
       submitAnswer: (transactionId, entry) => {
@@ -162,7 +169,7 @@ export const useSimulationStore = create<SimulationStore>()(
           progress.starsEarned = scorer.calculateStars(
             progress.attempts,
             progress.hintsUsed,
-            progress.timeExpired,
+            false, // No timer, so never expired
             true
           );
 
