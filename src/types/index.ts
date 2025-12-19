@@ -141,7 +141,11 @@ export interface GeneratedTransaction {
 }
 
 export interface SimulationConfig {
-  // Future configuration options can be added here
+  // Timer configuration
+  transactionTimeLimits: {
+    [transactionNumber: number]: number; // Seconds per transaction
+  };
+  timerWarningThreshold: number; // Seconds before showing warning
 }
 
 /**
@@ -171,6 +175,12 @@ export interface TransactionProgress {
   attempts: number; // 0-3
   hintsUsed: number; // 0-3
   hintsViewed: HintLevel[]; // Which hint levels viewed [1,2]
+
+  // Timer tracking
+  timeLimit: number; // Total seconds for this transaction
+  timeRemaining: number | null; // Current seconds left, null if expired
+  timeExpired: boolean; // Whether timer ran out
+  startedAt?: Date; // When transaction became active (for persistence)
 
   currentEntry: JournalEntry[]; // User's current input
   isCorrect: boolean | null; // null = not submitted yet
@@ -352,6 +362,10 @@ export interface SimulationStore {
   submitAnswer: (transactionId: string, entry: JournalEntry[]) => ValidationResult;
   useHint: (transactionId: string, level: HintLevel) => void;
   completeTransaction: (transactionId: string, isCorrect: boolean) => void;
+
+  // Timer actions
+  updateTimerTick: (transactionId: string, timeRemaining: number) => void;
+  handleTimerExpire: (transactionId: string) => void;
 
   // Navigation
   goToScreen: (screen: ScreenType) => void;

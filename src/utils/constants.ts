@@ -1,7 +1,15 @@
 import type { SimulationConfig } from '@/types';
 
 export const DEFAULT_CONFIG: SimulationConfig = {
-  // Future configuration options
+  transactionTimeLimits: {
+    1: 180, // 3:00
+    2: 180, // 3:00
+    3: 120, // 2:00
+    4: 120, // 2:00
+    5: 60,  // 1:00
+    6: 60,  // 1:00
+  },
+  timerWarningThreshold: 10, // Last 10 seconds
 };
 
 export const MAX_ATTEMPTS = 3;

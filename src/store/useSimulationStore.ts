@@ -40,6 +40,10 @@ interface SimulationStore {
   useHint: (transactionId: string, level: HintLevel) => void;
   completeTransaction: (transactionId: string, isCorrect: boolean) => void;
 
+  // Timer actions
+  updateTimerTick: (transactionId: string, timeRemaining: number) => void;
+  handleTimerExpire: (transactionId: string) => void;
+
   // Navigation
   goToScreen: (screen: ScreenType) => void;
   showModal: (modal: ModalData) => void;
@@ -82,12 +86,18 @@ export const useSimulationStore = create<SimulationStore>()(
 
         // Initialize progress for each transaction
         simulation.transactions.forEach((t) => {
+          const timeLimit = simulation.config.transactionTimeLimits[t.transactionNumber];
           userProgress.transactionProgress[t.id] = {
             transactionId: t.id,
             status: t.transactionNumber === 1 ? 'active' : 'locked',
             attempts: 0,
             hintsUsed: 0,
             hintsViewed: [],
+            // Timer initialization
+            timeLimit,
+            timeRemaining: t.transactionNumber === 1 ? timeLimit : null,
+            timeExpired: false,
+            startedAt: t.transactionNumber === 1 ? new Date() : undefined,
             currentEntry: [],
             isCorrect: null,
             starsEarned: 0,
@@ -103,11 +113,15 @@ export const useSimulationStore = create<SimulationStore>()(
       },
 
       startTransaction: (transactionId) => {
-        const { userProgress } = get();
-        if (!userProgress) return;
+        const { simulation, userProgress } = get();
+        if (!simulation || !userProgress) return;
 
+        const transaction = simulation.transactions.find((t) => t.id === transactionId);
         const progress = userProgress.transactionProgress[transactionId];
-        if (!progress) return;
+        if (!transaction || !progress) return;
+
+        // Determine time limit for this transaction
+        const timeLimit = simulation.config.transactionTimeLimits[transaction.transactionNumber];
 
         // IMMUTABLE UPDATE - Create new objects at each level
         set({
@@ -120,6 +134,11 @@ export const useSimulationStore = create<SimulationStore>()(
               [transactionId]: {
                 ...progress,
                 status: 'active',
+                // Timer initialization
+                timeLimit,
+                timeRemaining: timeLimit,
+                timeExpired: false,
+                startedAt: new Date(),
               },
             },
           },
@@ -169,7 +188,7 @@ export const useSimulationStore = create<SimulationStore>()(
           progress.starsEarned = scorer.calculateStars(
             progress.attempts,
             progress.hintsUsed,
-            false, // No timer, so never expired
+            progress.timeExpired, // Use actual timer expired flag
             true
           );
 
@@ -206,6 +225,85 @@ export const useSimulationStore = create<SimulationStore>()(
           set({ userProgress: { ...userProgress } });
           get().saveProgress();
         }
+      },
+
+      // Timer actions
+      updateTimerTick: (transactionId: string, timeRemaining: number) => {
+        const { userProgress } = get();
+        if (!userProgress) return;
+
+        const progress = userProgress.transactionProgress[transactionId];
+        if (!progress) return;
+
+        // IMMUTABLE UPDATE
+        set({
+          userProgress: {
+            ...userProgress,
+            transactionProgress: {
+              ...userProgress.transactionProgress,
+              [transactionId]: {
+                ...progress,
+                timeRemaining,
+              },
+            },
+          },
+        });
+
+        get().saveProgress();
+      },
+
+      handleTimerExpire: (transactionId: string) => {
+        const { simulation, userProgress, showModal } = get();
+        if (!simulation || !userProgress) return;
+
+        const transaction = simulation.transactions.find((t) => t.id === transactionId);
+        const progress = userProgress.transactionProgress[transactionId];
+        if (!transaction || !progress) return;
+
+        // Mark as expired and completed
+        progress.timeExpired = true;
+        progress.status = 'completed';
+        progress.isCorrect = false;
+        progress.completedAt = new Date();
+        progress.timeRemaining = 0;
+
+        // Calculate stars (0 because timeExpired = true)
+        const scorer = new ScoringEngine();
+        progress.starsEarned = scorer.calculateStars(
+          progress.attempts,
+          progress.hintsUsed,
+          true, // timeExpired!
+          false
+        );
+
+        // Unlock next transaction
+        const nextIndex = transaction.transactionNumber;
+        if (nextIndex < simulation.transactions.length) {
+          const nextTransaction = simulation.transactions[nextIndex];
+          userProgress.transactionProgress[nextTransaction.id].status = 'active';
+          userProgress.currentTransactionIndex = nextIndex;
+        } else {
+          userProgress.status = 'completed';
+          userProgress.completedAt = new Date();
+        }
+
+        set({ userProgress: { ...userProgress } });
+        get().saveProgress();
+
+        // Show solution modal
+        showModal({
+          type: 'feedback',
+          content: {
+            isCorrect: false,
+            message: 'Tijd is verstreken! 😅',
+            characterQuote: 'Geen paniek, hier is de correcte verwerking. Volgende keer iets sneller! 💪',
+            starsEarned: 0,
+            currentAttempt: progress.attempts,
+            maxAttempts: 3,
+            showSolution: true,
+            solution: transaction.correctAnswer,
+          },
+        });
       },
 
       completeTransaction: (transactionId, isCorrect) => {

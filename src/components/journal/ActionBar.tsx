@@ -20,7 +20,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const transaction = simulation?.transactions.find((t) => t.id === transactionId);
   const progress = userProgress?.transactionProgress[transactionId];
 
-  const canUseHint = progress && progress.hintsViewed.length < 3;
+  const timeExpired = progress?.timeExpired ?? false;
+  const canUseHint = progress && progress.hintsViewed.length < 3 && !timeExpired;
   const nextHintLevel = progress ? (progress.hintsViewed.length + 1) as 1 | 2 | 3 : 1;
 
   const handleHintClick = () => {
@@ -67,10 +68,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
 
         <button
           onClick={onSubmit}
-          disabled={!canSubmit}
-          className={`btn ${canSubmit ? 'btn-success' : 'btn-disabled'} px-8`}
+          disabled={!canSubmit || timeExpired}
+          className={`btn ${canSubmit && !timeExpired ? 'btn-success' : 'btn-disabled'} px-8`}
         >
-          ✓ Boeken
+          {timeExpired ? '⏱️ Tijd verstreken' : '✓ Boeken'}
         </button>
       </div>
     </div>

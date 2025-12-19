@@ -10,10 +10,10 @@ export class ScoringEngine {
   public calculateStars(
     attempts: number,
     hintsUsed: number,
-    _timeExpired: boolean,
+    timeExpired: boolean,
     isCorrect: boolean
   ): number {
-    if (!isCorrect) return 0;
+    if (!isCorrect || timeExpired) return 0;
 
     let stars = 0;
 

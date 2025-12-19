@@ -1,5 +1,6 @@
 import React from 'react';
 import { StarRating } from './StarRating';
+import { TransactionTimer } from '../timer/TransactionTimer';
 import type { GeneratedTransaction } from '@/types';
 
 interface HeaderProps {
@@ -21,13 +22,16 @@ export const Header: React.FC<HeaderProps> = ({ currentTransaction, stars }) => 
             </div>
           </div>
 
-          {/* Right - Stars and Time */}
+          {/* Right - Stars, Timer and Time */}
           <div className="flex items-center gap-6">
             <StarRating stars={stars} maxStars={6} />
             {currentTransaction && (
-              <div className="text-sm text-gray-600">
-                {currentTransaction.timeSlot}
-              </div>
+              <>
+                <TransactionTimer transactionId={currentTransaction.id} />
+                <div className="text-sm text-gray-600">
+                  {currentTransaction.timeSlot}
+                </div>
+              </>
             )}
           </div>
         </div>
