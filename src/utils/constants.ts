@@ -7,7 +7,6 @@ export const DEFAULT_CONFIG: SimulationConfig = {
     3: 120, // 2:00
     4: 120, // 2:00
     5: 60,  // 1:00
-    6: 60,  // 1:00
   },
   timerWarningThreshold: 10, // Last 10 seconds
 };
@@ -16,13 +15,13 @@ export const MAX_ATTEMPTS = 3;
 export const HINT_PENALTY = 0.25;
 export const MAX_JOURNAL_ROWS = 4;
 export const MIN_JOURNAL_ROWS = 2;
-export const TOTAL_TRANSACTIONS = 6;
-export const MAX_STARS = 6;
+export const TOTAL_TRANSACTIONS = 5;
+export const MAX_STARS = 5;
 
 export const PERFORMANCE_THRESHOLDS = {
-  excellent: 5.5,
-  good: 4.0,
-  pass: 3.0,
+  excellent: 4.5,
+  good: 3.5,
+  pass: 2.5,
 };
 
 export const ERROR_MESSAGES = {

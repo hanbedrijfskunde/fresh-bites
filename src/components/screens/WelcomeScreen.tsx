@@ -36,11 +36,11 @@ export const WelcomeScreen: React.FC = () => {
           <ul className="space-y-2 text-gray-700">
             <li className="flex items-start">
               <span className="mr-2">📊</span>
-              <span>6 transacties verspreid over één werkdag</span>
+              <span>5 transacties verspreid over één werkdag</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">⭐</span>
-              <span>Verdien tot 6 sterren op basis van je prestaties</span>
+              <span>Verdien tot 5 sterren op basis van je prestaties</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">💡</span>

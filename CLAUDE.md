@@ -46,7 +46,7 @@ BERICHT ontvangen → JOURNAAL invullen → VALIDATIE checken → FEEDBACK tonen
 
 
 ### Star Rating System
-- Max 6 stars total (1 per transaction)
+- Max 5 stars total (1 per transaction)
 - Correct first attempt: +1⭐, second: +0.5⭐, third: +0⭐
 - Hint used: -0.25⭐ penalty
 
@@ -349,7 +349,7 @@ Calculates stars based on attempts and hints.
 - Test star calculation formulas
 
 ### E2E Tests (Playwright)
-- Complete simulation flow (6 transactions)
+- Complete simulation flow (5 transactions)
 - Hint system (progressive hints, star penalties)
 - Accessibility (keyboard navigation, screen readers)
 

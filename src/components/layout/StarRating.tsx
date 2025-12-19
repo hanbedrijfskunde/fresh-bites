@@ -9,7 +9,7 @@ interface StarRatingProps {
 
 export const StarRating: React.FC<StarRatingProps> = ({
   stars,
-  maxStars = 6,
+  maxStars = 5,
   size = 'md',
   showCount = true,
 }) => {

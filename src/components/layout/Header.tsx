@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTransaction, stars }) => 
 
           {/* Right - Stars, Timer and Time */}
           <div className="flex items-center gap-6">
-            <StarRating stars={stars} maxStars={6} />
+            <StarRating stars={stars} maxStars={5} />
             {currentTransaction && (
               <>
                 <TransactionTimer transactionId={currentTransaction.id} />
