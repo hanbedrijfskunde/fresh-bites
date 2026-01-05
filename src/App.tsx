@@ -2,6 +2,7 @@
 import { WelcomeScreen } from './components/screens/WelcomeScreen';
 import { SimulationScreen } from './components/screens/SimulationScreen';
 import { EndScreen } from './components/screens/EndScreen';
+import { ReviewModeScreen } from './components/screens/ReviewModeScreen';
 import { useSimulationStore } from './store/useSimulationStore';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       {currentScreen === 'welcome' && <WelcomeScreen />}
       {currentScreen === 'simulation' && <SimulationScreen />}
       {currentScreen === 'end' && <EndScreen />}
+      {currentScreen === 'review' && <ReviewModeScreen />}
     </>
   );
 }

@@ -120,10 +120,7 @@ export const EndScreen: React.FC = () => {
             Opnieuw spelen
           </button>
           <button
-            onClick={() => {
-              // TODO: Implement review mode
-              alert('Review modus komt binnenkort!');
-            }}
+            onClick={() => goToScreen('review')}
             className="btn btn-secondary flex-1 py-3"
           >
             Bekijk journaalposten

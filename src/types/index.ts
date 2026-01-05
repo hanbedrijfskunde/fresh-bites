@@ -257,7 +257,7 @@ export interface ValidationResult {
 // UI STATE
 // ============================================================================
 
-export type ScreenType = 'welcome' | 'simulation' | 'end';
+export type ScreenType = 'welcome' | 'simulation' | 'end' | 'review';
 export type ModalType = 'none' | 'feedback' | 'attachment' | 'hint';
 
 export interface JournalRowState {
